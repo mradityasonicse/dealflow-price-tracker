@@ -46,11 +46,14 @@
   function getAmazonCurrentPrice() {
     const selectors = [
       ".apexPriceToPay .a-offscreen",
+      ".priceToPay .a-offscreen",
       "#corePrice_desktop .a-offscreen",
       "#corePriceDisplay_desktop_feature_div .a-offscreen",
+      "#price_inside_buybox",
       "#priceblock_ourprice",
       "#priceblock_dealprice",
-      ".a-price .a-offscreen"
+      ".a-price .a-offscreen",
+      "#tp_price_block_total_price_ww .a-offscreen"
     ];
     for (const s of selectors) {
       const el = document.querySelector(s);
@@ -75,6 +78,7 @@
   function getFlipkartCurrentPrice() {
     const selectors = [
       ".Nx9bqj.CxhGGd",
+      ".Nx9bqj",
       "div._30jeq3._16J0da",
       "div._30jeq3",
       "._1vC4OE._3qQ9m1"

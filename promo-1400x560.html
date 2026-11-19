@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DealFlow Promo 1400x560</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      width: 1400px;
+      height: 560px;
+      overflow: hidden;
+      background: radial-gradient(circle at 75% 30%, #151b36 0%, #080a14 70%, #04050a 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 80px;
+      position: relative;
+    }
+
+    .glow-1 {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.22) 0%, transparent 65%);
+      top: -150px;
+      left: 100px;
+      filter: blur(55px);
+    }
+
+    .glow-2 {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.18) 0%, transparent 70%);
+      bottom: -120px;
+      right: 150px;
+      filter: blur(65px);
+    }
+
+    /* Left Copy Area */
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 10;
+      max-width: 680px;
+    }
+
+    .badge-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(99, 102, 241, 0.18);
+      border: 1px solid rgba(99, 102, 241, 0.45);
+      padding: 6px 14px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #818cf8;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .pill-badge .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #818cf8;
+      box-shadow: 0 0 8px #818cf8;
+    }
+
+    .version-tag {
+      font-size: 13px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    .title-block h1 {
+      font-size: 56px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.05;
+      letter-spacing: -1.5px;
+    }
+
+    .title-block h1 span {
+      background: linear-gradient(135deg, #818cf8 0%, #34d399 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tagline {
+      font-size: 20px;
+      color: #94a3b8;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
+    .features-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      color: #e2e8f0;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chip svg {
+      width: 14px;
+      height: 14px;
+      stroke: #10b981;
+    }
+
+    /* Right Visual Widget */
+    .visual-wrapper {
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .glass-card {
+      width: 440px;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(25px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.75), 0 0 50px rgba(99, 102, 241, 0.15);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 14px;
+    }
+
+    .deal-icon-lg {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #6366f1 0%, #10b981 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 18px rgba(99, 102, 241, 0.45);
+    }
+
+    .deal-icon-lg svg {
+      width: 28px;
+      height: 28px;
+      stroke: #ffffff;
+    }
+
+    .card-top-info h3 {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .card-top-info p {
+      font-size: 13px;
+      color: #10b981;
+      font-weight: 600;
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .stat-box {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .stat-box.green {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .stat-num {
+      font-size: 26px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1;
+    }
+
+    .stat-box.green .stat-num {
+      color: #34d399;
+    }
+
+    .stat-label {
+      font-size: 11.5px;
+      color: #94a3b8;
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    .status-strip {
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12.5px;
+      color: #e2e8f0;
+      font-weight: 500;
+    }
+
+    .status-strip span:last-child {
+      color: #818cf8;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-1"></div>
+  <div class="glow-2"></div>
+
+  <!-- Left Content -->
+  <div class="hero-content">
+    <div class="badge-row">
+      <div class="pill-badge">
+        <span class="dot"></span>
+        <span>E-Commerce Engine</span>
+      </div>
+      <span class="version-tag">Manifest V3 &bull; Open Source</span>
+    </div>
+
+    <div class="title-block">
+      <h1>DealFlow <span>PRO</span></h1>
+    </div>
+
+    <p class="tagline">
+      Real-time Amazon & Flipkart 90-day price history graphs, price drop alerts, and instant coupon auto-applier.
+    </p>
+
+    <div class="features-chips">
+      <div class="chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>90-Day Vector SVG Charts</span>
+      </div>
+      <div class="chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>Instant Auto-Coupons</span>
+      </div>
+      <div class="chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>Price Drop Notifications</span>
+      </div>
+      <div class="chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        <span>Passive Affiliate Engine</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Glass Card -->
+  <div class="visual-wrapper">
+    <div class="glass-card">
+      <div class="card-top">
+        <div class="deal-icon-lg">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
+        <div class="card-top-info">
+          <h3>DealFlow Pro</h3>
+          <p>Live Price Intelligence</p>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-box green">
+          <div class="stat-num">&#8377;1,850</div>
+          <div class="stat-label">User Money Saved</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">90 Days</div>
+          <div class="stat-label">Price History Depth</div>
+        </div>
+      </div>
+
+      <div class="status-strip">
+        <span>Amazon & Flipkart Engine</span>
+        <span>Instant Auto-Apply</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

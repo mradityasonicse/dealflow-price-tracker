@@ -1,6 +1,6 @@
 /**
  * DealFlow - Service Worker (Background)
- * Manifest V3 Affiliate Tag Binding, Price Alert Monitor & Telemetry
+ * Manifest V3 Dynamic Affiliate Tag Binding, Price Alert Monitor & Telemetry
  */
 
 const DEFAULT_CONFIG = {
@@ -34,13 +34,13 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 });
 
 /**
- * Dynamically attach affiliate tag using declarativeNetRequest
+ * Dynamically attach affiliate tags using declarativeNetRequest
  */
 async function setupAffiliateDnrRules() {
-  const { amazonTag } = await chrome.storage.local.get("amazonTag");
-  const tag = amazonTag || DEFAULT_CONFIG.amazonTag;
+  const { amazonTag, flipkartAffid } = await chrome.storage.local.get(["amazonTag", "flipkartAffid"]);
+  const aTag = amazonTag || DEFAULT_CONFIG.amazonTag;
+  const fTag = flipkartAffid || DEFAULT_CONFIG.flipkartAffid;
 
-  // Rule ID 1001: Append tag parameter to Amazon product page navigations if missing
   const rules = [
     {
       id: 1001,
@@ -50,13 +50,49 @@ async function setupAffiliateDnrRules() {
         redirect: {
           transform: {
             queryTransform: {
-              addOrReplaceParams: [{ key: "tag", value: tag }]
+              addOrReplaceParams: [{ key: "tag", value: aTag }]
             }
           }
         }
       },
       condition: {
-        urlFilter: "||amazon.in/dp/*",
+        urlFilter: "||amazon.in/*",
+        resourceTypes: ["main_frame"]
+      }
+    },
+    {
+      id: 1002,
+      priority: 1,
+      action: {
+        type: "redirect",
+        redirect: {
+          transform: {
+            queryTransform: {
+              addOrReplaceParams: [{ key: "tag", value: aTag }]
+            }
+          }
+        }
+      },
+      condition: {
+        urlFilter: "||amazon.com/*",
+        resourceTypes: ["main_frame"]
+      }
+    },
+    {
+      id: 1003,
+      priority: 1,
+      action: {
+        type: "redirect",
+        redirect: {
+          transform: {
+            queryTransform: {
+              addOrReplaceParams: [{ key: "affid", value: fTag }]
+            }
+          }
+        }
+      },
+      condition: {
+        urlFilter: "||flipkart.com/*",
         resourceTypes: ["main_frame"]
       }
     }
@@ -69,7 +105,7 @@ async function setupAffiliateDnrRules() {
       removeRuleIds: removeIds,
       addRules: rules
     });
-    console.log("[DealFlow] Affiliate DNR rule attached with tag:", tag);
+    console.log("[DealFlow] Affiliate DNR rules active — Amazon:", aTag, "Flipkart:", fTag);
   } catch (err) {
     console.debug("[DealFlow] DNR update notice:", err);
   }

@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DealFlow Showcase</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      width: 1280px;
+      height: 800px;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 15%, #13172e 0%, #080a14 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Ambient studio background glow */
+    .ambient-glow-1 {
+      position: absolute;
+      width: 750px;
+      height: 750px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.22) 0%, transparent 70%);
+      top: -200px;
+      right: 50px;
+      filter: blur(65px);
+      pointer-events: none;
+    }
+
+    .ambient-glow-2 {
+      position: absolute;
+      width: 650px;
+      height: 650px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.16) 0%, transparent 70%);
+      bottom: -180px;
+      left: 80px;
+      filter: blur(75px);
+      pointer-events: none;
+    }
+
+    /* Brand Header Watermark */
+    .brand-watermark {
+      position: absolute;
+      top: 18px;
+      left: 45px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #94a3b8;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .brand-watermark .badge {
+      background: rgba(99, 102, 241, 0.18);
+      border: 1px solid rgba(99, 102, 241, 0.45);
+      color: #818cf8;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .github-callout {
+      position: absolute;
+      top: 18px;
+      right: 45px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #cbd5e1;
+      font-size: 12.5px;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 5px 12px;
+      border-radius: 8px;
+    }
+
+    .github-callout svg {
+      width: 15px;
+      height: 15px;
+      fill: currentColor;
+    }
+
+    /* Browser Mockup Window */
+    .browser-frame {
+      width: 1200px;
+      height: 720px;
+      margin-top: 25px;
+      background: #0b0f19;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 35px 95px rgba(0, 0, 0, 0.85), 0 0 50px rgba(99, 102, 241, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Titlebar */
+    .titlebar {
+      height: 44px;
+      background: #080c16;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 16px;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+
+    .browser-tab {
+      background: #1e2538;
+      color: #f8fafc;
+      font-size: 12.5px;
+      padding: 8px 18px;
+      border-radius: 8px 8px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: none;
+    }
+
+    .browser-tab .store-badge-mini {
+      color: #f59e0b;
+      font-weight: 800;
+    }
+
+    .address-bar {
+      flex: 1;
+      height: 30px;
+      background: #040711;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 8px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .lock-icon {
+      color: #10b981;
+      display: flex;
+    }
+
+    .address-url {
+      color: #cbd5e1;
+    }
+
+    .address-url span {
+      color: #64748b;
+    }
+
+    .ext-icons-tray {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-left: 8px;
+    }
+
+    .ext-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, #6366f1 0%, #10b981 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .ext-badge svg {
+      width: 16px;
+      height: 16px;
+      stroke: #ffffff;
+    }
+
+    /* Viewport */
+    .viewport {
+      flex: 1;
+      background: #070a14;
+      display: flex;
+      position: relative;
+    }
+
+    /* Left Stage: E-Commerce Product View with Injected Widget */
+    .product-stage {
+      flex: 1;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow: hidden;
+    }
+
+    .product-header-card {
+      background: #0d1322;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 18px 22px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .product-img-box {
+      width: 90px;
+      height: 90px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .product-img-box svg {
+      width: 46px;
+      height: 46px;
+      stroke: #818cf8;
+    }
+
+    .product-details {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .product-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #f1f5f9;
+      line-height: 1.3;
+    }
+
+    .product-pricing-row {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .current-price {
+      font-size: 26px;
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .original-price {
+      font-size: 15px;
+      color: #64748b;
+      text-decoration: line-through;
+    }
+
+    .discount-tag {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #ef4444;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .prime-delivery {
+      font-size: 12px;
+      color: #10b981;
+      font-weight: 600;
+    }
+
+    /* INJECTED DEALFLOW WIDGET */
+    .injected-widget {
+      background: #0b1120;
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      border-radius: 12px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6), 0 0 25px rgba(99, 102, 241, 0.15);
+      position: relative;
+    }
+
+    .widget-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .widget-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .widget-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, #6366f1, #10b981);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 900;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+    }
+
+    .widget-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .deal-badge {
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stats-grid-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .stat-pill {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .stat-pill.highlight {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .stat-pill .label {
+      font-size: 10.5px;
+      color: #94a3b8;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .stat-pill .value {
+      font-size: 16px;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .stat-pill.highlight .value {
+      color: #34d399;
+    }
+
+    /* Vector SVG Chart */
+    .chart-box {
+      width: 100%;
+      height: 100px;
+      background: rgba(15, 23, 42, 0.7);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 10px 14px 6px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .chart-meta-row {
+      display: flex;
+      justify-content: space-between;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .widget-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 4px;
+    }
+
+    .alert-btn {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: #818cf8;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .coupon-hint {
+      font-size: 12px;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    /* Right Popup Interface Sidebar */
+    .popup-sidebar {
+      width: 370px;
+      padding: 20px 24px 20px 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .popup-card {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 35px rgba(99, 102, 241, 0.18);
+    }
+
+    .popup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 14px;
+    }
+
+    .popup-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #6366f1 0%, #10b981 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.45);
+    }
+
+    .brand-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: #ffffff;
+    }
+
+    .brand-title h2 {
+      font-size: 16px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+    }
+
+    .brand-title h2 span {
+      background: linear-gradient(135deg, #818cf8, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+    }
+
+    .brand-title p {
+      font-size: 11px;
+      color: #10b981;
+      font-weight: 600;
+    }
+
+    /* Store Status Card */
+    .store-banner {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .store-badge-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .store-badge-line strong {
+      font-size: 12.5px;
+      color: #f59e0b;
+      font-weight: 700;
+    }
+
+    .auto-coupon-pill {
+      font-size: 10px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #10b981;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    .store-desc {
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    /* Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .metric-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .metric-card.green {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .metric-val {
+      font-size: 22px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .metric-card.green .metric-val {
+      color: #34d399;
+    }
+
+    .metric-lbl {
+      font-size: 10.5px;
+      color: #94a3b8;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* Affiliate Commission Box */
+    .monetization-box {
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mono-left {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mono-left strong {
+      font-size: 12px;
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+
+    .mono-left span {
+      font-size: 11px;
+      color: #818cf8;
+      font-weight: 600;
+    }
+
+    .mono-active-badge {
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #10b981;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    /* Features List */
+    .features-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 12px;
+    }
+
+    .feat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: #cbd5e1;
+    }
+
+    .feat-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot-badge {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .dot-badge.indigo { background: #818cf8; box-shadow: 0 0 6px #818cf8; }
+    .dot-badge.emerald { background: #10b981; box-shadow: 0 0 6px #10b981; }
+    .dot-badge.amber { background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
+
+    .tag-active {
+      font-size: 10px;
+      font-weight: 600;
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- Header callouts -->
+  <div class="brand-watermark">
+    <span class="badge">E-Commerce Intelligence</span>
+    <span>DealFlow Pro &bull; Amazon & Flipkart Price Tracker & Auto-Coupons</span>
+  </div>
+
+  <div class="github-callout">
+    <svg viewBox="0 0 16 16">
+      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+    </svg>
+    <span>github.com/mradityasonicse/dealflow-price-tracker</span>
+  </div>
+
+  <div class="browser-frame">
+    <!-- Window Titlebar -->
+    <div class="titlebar">
+      <div class="window-dots">
+        <div class="dot red"></div>
+        <div class="dot yellow"></div>
+        <div class="dot green"></div>
+      </div>
+      <div class="browser-tab">
+        <span class="store-badge-mini">a</span>
+        <span>Amazon.in &mdash; Wireless Noise Cancelling Headphones</span>
+      </div>
+      <div class="address-bar">
+        <span class="lock-icon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </span>
+        <span class="address-url">https://www.amazon.in<span>/dp/B08N5WRWNW?tag=dealflow0a-21</span></span>
+      </div>
+      <div class="ext-icons-tray">
+        <div class="ext-badge" title="DealFlow Active">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Viewport -->
+    <div class="viewport">
+      <!-- Left Stage: Real Product Page with Injected DealFlow Widget -->
+      <div class="product-stage">
+        <!-- Mock Product Header -->
+        <div class="product-header-card">
+          <div class="product-img-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+              <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+              <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+            </svg>
+          </div>
+          <div class="product-details">
+            <h1 class="product-title">Sony WH-1000XM5 Wireless Active Noise Cancelling Headphones (30h Battery, Hi-Res Audio)</h1>
+            <div class="product-pricing-row">
+              <span class="current-price">&#8377;26,990</span>
+              <span class="original-price">&#8377;34,990</span>
+              <span class="discount-tag">23% OFF</span>
+              <span class="prime-delivery">&bull; FREE Prime Delivery</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Injected DealFlow Price Intelligence Widget -->
+        <div class="injected-widget">
+          <div class="widget-header">
+            <div class="widget-brand">
+              <div class="widget-icon">⚡</div>
+              <span class="widget-title">DealFlow Price Intelligence</span>
+            </div>
+            <div class="deal-badge">
+              <span>🔥</span>
+              <span>Lowest Price in 90 Days!</span>
+            </div>
+          </div>
+
+          <div class="stats-grid-row">
+            <div class="stat-pill highlight">
+              <span class="label">Current</span>
+              <span class="value">&#8377;26,990</span>
+            </div>
+            <div class="stat-pill">
+              <span class="label">Lowest</span>
+              <span class="value">&#8377;24,990</span>
+            </div>
+            <div class="stat-pill">
+              <span class="label">Average</span>
+              <span class="value">&#8377;29,450</span>
+            </div>
+            <div class="stat-pill">
+              <span class="label">Highest</span>
+              <span class="value">&#8377;34,990</span>
+            </div>
+          </div>
+
+          <!-- Pure SVG Vector Chart -->
+          <div class="chart-box">
+            <svg viewBox="0 0 540 60" style="width: 100%; height: 44px;" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="dfChartGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#10b981" stop-opacity="0.4"/>
+                  <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
+                </linearGradient>
+              </defs>
+              <path d="M 10 20 C 70 10, 130 45, 190 25 C 250 5, 310 35, 370 28 C 430 20, 480 50, 530 46 L 530 60 L 10 60 Z" fill="url(#dfChartGrad)"/>
+              <path d="M 10 20 C 70 10, 130 45, 190 25 C 250 5, 310 35, 370 28 C 430 20, 480 50, 530 46" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="530" cy="46" r="4.5" fill="#10b981" stroke="#ffffff" stroke-width="2"/>
+            </svg>
+            <div class="chart-meta-row">
+              <span>90 Days Ago (&#8377;34,990)</span>
+              <span>45 Days Ago (&#8377;29,450)</span>
+              <span style="color: #34d399; font-weight: 700;">Today (&#8377;26,990)</span>
+            </div>
+          </div>
+
+          <div class="widget-actions">
+            <div class="alert-btn">
+              <span>🔔</span>
+              <span>Set Price Drop Alert for &#8377;24,290</span>
+            </div>
+            <span class="coupon-hint">✨ 5 Coupons Ready at Checkout</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Popup Sidebar -->
+      <div class="popup-sidebar">
+        <div class="popup-card">
+          <div class="popup-header">
+            <div class="popup-brand">
+              <div class="brand-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+              </div>
+              <div class="brand-title">
+                <h2>DealFlow <span>PRO</span></h2>
+                <p>ENGINE ACTIVE</p>
+              </div>
+            </div>
+            <div class="gear-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="store-banner">
+            <div class="store-badge-line">
+              <strong>Amazon Active</strong>
+              <span class="auto-coupon-pill">Auto-Coupons ON</span>
+            </div>
+            <p class="store-desc">
+              Tracking Amazon & Flipkart prices in real time. 90-day vector chart injected on product pages.
+            </p>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-card green">
+              <span class="metric-val">&#8377;1,850</span>
+              <span class="metric-lbl">Total User Savings</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-val">14</span>
+              <span class="metric-lbl">Tracked Deals</span>
+            </div>
+          </div>
+
+          <div class="monetization-box">
+            <div class="mono-left">
+              <strong>Affiliate Mode Active</strong>
+              <span>Tag: dealflow0a-21</span>
+            </div>
+            <span class="mono-active-badge">Monetized</span>
+          </div>
+
+          <div class="features-list">
+            <div class="feat-row">
+              <div class="feat-left">
+                <span class="dot-badge emerald"></span>
+                <span>90-Day Vector Chart</span>
+              </div>
+              <span class="tag-active">Active</span>
+            </div>
+            <div class="feat-row">
+              <div class="feat-left">
+                <span class="dot-badge indigo"></span>
+                <span>Checkout Coupon Applier</span>
+              </div>
+              <span class="tag-active">Active</span>
+            </div>
+            <div class="feat-row">
+              <div class="feat-left">
+                <span class="dot-badge amber"></span>
+                <span>DNR Dynamic Affiliate Binding</span>
+              </div>
+              <span class="tag-active">Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
