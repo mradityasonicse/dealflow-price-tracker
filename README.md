@@ -1,5 +1,7 @@
 # DealFlow — Price Tracker & Auto-Coupon Engine
 
+![DealFlow Live Preview](screenshot.png)
+
 DealFlow is a Chrome extension for Amazon and Flipkart that tracks historical prices, displays 90-day price trends directly on product pages, and automatically finds and tests coupon codes at checkout.
 
 ## Key Features
