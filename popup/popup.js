@@ -14,6 +14,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Load telemetry state
   async function loadState() {
     chrome.runtime.sendMessage({ type: "GET_EXTENSION_STATE" }, (res) => {
+      if (chrome.runtime.lastError) {
+        console.debug("[DealFlow] State fetch:", chrome.runtime.lastError.message);
+        return;
+      }
       if (res) {
         savingsCount.textContent = "₹" + (res.totalSavedAmount || 1850).toLocaleString("en-IN");
         alertsCount.textContent = res.alertsCount || 0;

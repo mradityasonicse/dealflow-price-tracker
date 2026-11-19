@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Amazon.in - DealFlow Real Capture</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Amazon Ember", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      width: 1280px;
+      height: 800px;
+      overflow: hidden;
+      background: #eaeded;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* =========================================================
+       CHROME BROWSER TOP FRAME & TABS
+       ========================================================= */
+    .chrome-titlebar {
+      height: 38px;
+      background: #202124;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      gap: 12px;
+      user-select: none;
+      border-bottom: 1px solid #303134;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 8px;
+      margin-right: 6px;
+    }
+    .w-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .w-red { background: #ff5f56; }
+    .w-yellow { background: #ffbd2e; }
+    .w-green { background: #27c93f; }
+
+    .tabs-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+      height: 100%;
+      padding-top: 6px;
+    }
+
+    .c-tab {
+      height: 32px;
+      background: #2d2e31;
+      border-radius: 8px 8px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      font-size: 12px;
+      color: #e8eaed;
+      max-width: 250px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      border: 1px solid #3c4043;
+      border-bottom: none;
+    }
+    .c-tab-icon { color: #f59e0b; font-weight: 900; font-size: 13px; }
+
+    .c-tab-inactive {
+      height: 30px;
+      color: #9aa0a6;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px;
+      font-size: 11.5px;
+    }
+
+    /* Chrome Navigation Bar */
+    .chrome-nav-bar {
+      height: 42px;
+      background: #292a2d;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 12px;
+      border-bottom: 1px solid #1f2023;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+      color: #9aa0a6;
+    }
+    .nav-buttons svg { width: 16px; height: 16px; fill: currentColor; }
+
+    .url-omnibox {
+      flex: 1;
+      height: 28px;
+      background: #1f2023;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 8px;
+      font-size: 12px;
+      color: #e8eaed;
+      border: 1px solid #3c4043;
+    }
+    .url-omnibox .lock { color: #10b981; }
+    .url-omnibox .domain { color: #fff; font-weight: 500; }
+    .url-omnibox .path { color: #9aa0a6; }
+
+    .extension-tray {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .dealflow-toolbar-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, #6366f1, #10b981);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
+      cursor: pointer;
+      position: relative;
+    }
+    .dealflow-toolbar-icon svg { width: 16px; height: 16px; fill: #fff; }
+    .ext-badge-num {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      background: #10b981;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1px 4px;
+      border-radius: 10px;
+      border: 1px solid #292a2d;
+    }
+
+    .user-avatar-mini {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #f59e0b;
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* =========================================================
+       REAL AMAZON.IN NAVBAR
+       ========================================================= */
+    .amz-nav-main {
+      height: 54px;
+      background: #131921;
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      gap: 18px;
+      color: #fff;
+    }
+
+    .amz-logo-block {
+      display: flex;
+      align-items: baseline;
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+      cursor: pointer;
+    }
+    .amz-logo-block span { font-size: 13px; color: #f59e0b; font-weight: 500; }
+
+    .amz-location-block {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: #ccc;
+      line-height: 1.2;
+    }
+    .amz-location-block strong { color: #fff; font-size: 12px; }
+
+    .amz-search-bar {
+      flex: 1;
+      height: 38px;
+      display: flex;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .amz-search-select {
+      background: #e6e6e6;
+      border: none;
+      padding: 0 10px;
+      font-size: 12px;
+      color: #555;
+      border-right: 1px solid #ccc;
+      outline: none;
+    }
+    .amz-search-input {
+      flex: 1;
+      border: none;
+      padding: 0 14px;
+      font-size: 14px;
+      outline: none;
+      color: #111;
+    }
+    .amz-search-submit {
+      width: 44px;
+      background: #febd69;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .amz-search-submit svg { width: 18px; height: 18px; fill: #111; }
+
+    .amz-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 12px;
+      color: #ccc;
+      line-height: 1.2;
+    }
+    .amz-nav-right strong { color: #fff; font-size: 13px; display: block; }
+
+    .amz-cart-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .amz-cart-count { color: #f59e0b; font-size: 16px; font-weight: 900; }
+
+    /* Amazon Subnav */
+    .amz-subnav {
+      height: 34px;
+      background: #232f3e;
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      gap: 16px;
+      font-size: 12.5px;
+      color: #fff;
+    }
+    .amz-subnav span { cursor: pointer; white-space: nowrap; }
+    .amz-subnav span:hover { text-decoration: underline; }
+
+    /* =========================================================
+       REAL PRODUCT PAGE BODY
+       ========================================================= */
+    .amz-product-page {
+      flex: 1;
+      background: #fff;
+      padding: 18px 24px;
+      display: flex;
+      gap: 24px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Left Image Gallery */
+    .amz-gallery-col {
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .amz-main-image {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    }
+
+    .amz-thumbs-row {
+      display: flex;
+      gap: 10px;
+    }
+    .amz-thumb-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      overflow: hidden;
+    }
+    .amz-thumb-box img { width: 100%; height: 100%; object-fit: cover; }
+    .amz-thumb-box.active { border: 2px solid #e47911; }
+
+    /* Center Product Information */
+    .amz-details-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 520px;
+    }
+
+    .amz-prod-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0f1111;
+      line-height: 1.35;
+    }
+
+    .amz-brand-link {
+      font-size: 12px;
+      color: #007185;
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .amz-rating-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+    }
+    .amz-stars { color: #de7921; font-size: 13px; }
+    .amz-rating-count { color: #007185; }
+    .amz-badge-seller {
+      background: #232f3e;
+      color: #fff;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+
+    .amz-divider {
+      height: 1px;
+      background: #e7e7e7;
+      margin: 2px 0;
+    }
+
+    .amz-price-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .amz-deal-tag {
+      display: inline-block;
+      width: fit-content;
+      background: #cc0c39;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 7px;
+      border-radius: 3px;
+    }
+    .amz-price-big {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .amz-discount { font-size: 24px; color: #cc0c39; font-weight: 300; }
+    .amz-cur-price { font-size: 26px; font-weight: 700; color: #0f1111; }
+    .amz-mrp-row { font-size: 12px; color: #565959; }
+    .amz-mrp-row del { color: #565959; }
+
+    /* =========================================================
+       INJECTED DEALFLOW WIDGET (Inside the Amazon Page)
+       ========================================================= */
+    .injected-dealflow-card {
+      background: #0b1120;
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15), 0 0 20px rgba(99, 102, 241, 0.12);
+      color: #fff;
+      margin-top: 4px;
+    }
+
+    .df-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .df-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .df-icon-square {
+      width: 24px;
+      height: 24px;
+      border-radius: 5px;
+      background: linear-gradient(135deg, #6366f1, #10b981);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 900;
+      font-size: 12px;
+    }
+    .df-brand-name {
+      font-size: 13px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .df-lowest-badge {
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #10b981;
+      padding: 3px 8px;
+      border-radius: 5px;
+    }
+
+    .df-stats-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .df-stat-box {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
+      padding: 6px;
+      text-align: center;
+    }
+    .df-stat-box.green {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+    .df-stat-box .lbl { font-size: 9.5px; color: #94a3b8; }
+    .df-stat-box .val { font-size: 13px; font-weight: 800; color: #fff; margin-top: 1px; }
+    .df-stat-box.green .val { color: #34d399; }
+
+    /* SVG Chart */
+    .df-chart-area {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      padding: 8px 12px 4px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .df-chart-timeline {
+      display: flex;
+      justify-content: space-between;
+      color: #64748b;
+      font-size: 9.5px;
+    }
+
+    .df-action-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .df-alert-pill {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: #818cf8;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .df-coupon-hint {
+      font-size: 11px;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    /* Right Column: Amazon Buy Box */
+    .amz-buybox-col {
+      width: 240px;
+      border: 1px solid #d5d9d9;
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      height: fit-content;
+      background: #fff;
+    }
+
+    .amz-bb-price { font-size: 20px; font-weight: 700; color: #0f1111; }
+    .amz-bb-del { font-size: 12px; color: #565959; line-height: 1.35; }
+    .amz-bb-del strong { color: #0f1111; }
+    .amz-bb-stock { font-size: 15px; color: #007600; font-weight: 600; }
+
+    .amz-add-btn {
+      background: #ffd814;
+      border: 1px solid #fcd200;
+      border-radius: 20px;
+      padding: 8px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: #0f1111;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+    }
+    .amz-buy-btn {
+      background: #ffa41c;
+      border: 1px solid #ff8f00;
+      border-radius: 20px;
+      padding: 8px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: #0f1111;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+    }
+
+    .amz-sold-by {
+      font-size: 11px;
+      color: #565959;
+      line-height: 1.4;
+    }
+    .amz-sold-by span { color: #007185; }
+
+    /* =========================================================
+       AUTHENTIC DEALFLOW POPUP DROPPED DOWN
+       ========================================================= */
+    .dealflow-popup-overlay {
+      position: absolute;
+      top: 80px;
+      right: 28px;
+      width: 350px;
+      background: rgba(15, 23, 42, 0.98);
+      backdrop-filter: blur(25px);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(99, 102, 241, 0.25);
+      z-index: 100;
+      color: #fff;
+    }
+
+    .df-pop-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 12px;
+    }
+    .df-pop-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .df-pop-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #6366f1, #10b981);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.45);
+    }
+    .df-pop-logo svg { width: 18px; height: 18px; fill: #fff; }
+    .df-pop-brand-text h2 { font-size: 15px; font-weight: 800; color: #fff; }
+    .df-pop-brand-text h2 span { color: #818cf8; }
+    .df-pop-brand-text p { font-size: 11px; color: #10b981; font-weight: 600; }
+
+    .df-pop-store-bar {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 9px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .df-store-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .df-store-row strong { font-size: 12.5px; color: #f59e0b; }
+    .df-coupon-tag {
+      font-size: 10px;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #10b981;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .df-store-desc { font-size: 10.5px; color: #94a3b8; }
+
+    .df-pop-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .df-pop-card {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+    .df-pop-card.green {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+    .df-pop-card .num { font-size: 20px; font-weight: 800; color: #fff; }
+    .df-pop-card.green .num { color: #34d399; }
+    .df-pop-card .lbl { font-size: 10px; color: #94a3b8; margin-top: 3px; font-weight: 500; }
+
+    .df-affiliate-box {
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 8px;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .df-aff-left strong { font-size: 12px; color: #fff; }
+    .df-aff-left span { font-size: 10.5px; color: #818cf8; display: block; font-weight: 600; }
+    .df-aff-badge {
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #10b981;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .df-pop-feats {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 10px;
+      font-size: 11.5px;
+      color: #cbd5e1;
+    }
+    .df-pop-feat-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .df-feat-left {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .d-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .d-dot.indigo { background: #818cf8; box-shadow: 0 0 6px #818cf8; }
+    .d-dot.emerald { background: #10b981; box-shadow: 0 0 6px #10b981; }
+    .d-dot.amber { background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
+    .d-active-tag {
+      font-size: 10px;
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <!-- Chrome Top Frame -->
+  <div class="chrome-titlebar">
+    <div class="window-controls">
+      <div class="w-dot w-red"></div>
+      <div class="w-dot w-yellow"></div>
+      <div class="w-dot w-green"></div>
+    </div>
+    <div class="tabs-row">
+      <div class="c-tab">
+        <span class="c-tab-icon">a</span>
+        <span>Amazon.in: Sony WH-1000XM5 Wireless Headphones...</span>
+      </div>
+      <div class="c-tab-inactive">
+        <span>Flipkart &bull; Price Tracker</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chrome Navigation & Omnibox -->
+  <div class="chrome-nav-bar">
+    <div class="nav-buttons">
+      <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+    </div>
+
+    <div class="url-omnibox">
+      <span class="lock">&#128274;</span>
+      <span class="domain">https://www.amazon.in</span>
+      <span class="path">/Sony-WH-1000XM5-Headphones/dp/B09XS7JWHH?tag=dealflow0a-21</span>
+    </div>
+
+    <div class="extension-tray">
+      <div class="dealflow-toolbar-icon" title="DealFlow Active">
+        <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        <div class="ext-badge-num">5</div>
+      </div>
+      <div class="user-avatar-mini">A</div>
+    </div>
+  </div>
+
+  <!-- Real Amazon Main Nav -->
+  <div class="amz-nav-main">
+    <div class="amz-logo-block">amazon<span>.in</span></div>
+
+    <div class="amz-location-block">
+      <span>&#128205;</span>
+      <div>Delivering to Mumbai 400001<br><strong>Update location</strong></div>
+    </div>
+
+    <div class="amz-search-bar">
+      <select class="amz-search-select"><option>All</option></select>
+      <input type="text" class="amz-search-input" value="Sony WH-1000XM5 Wireless Headphones" readonly>
+      <button class="amz-search-submit">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      </button>
+    </div>
+
+    <div class="amz-nav-right">
+      <div>Hello, Aditya<br><strong>Account & Lists</strong></div>
+      <div>Returns<br><strong>& Orders</strong></div>
+      <div class="amz-cart-btn">&#128722; <span class="amz-cart-count">2</span> Cart</div>
+    </div>
+  </div>
+
+  <!-- Amazon Subnav -->
+  <div class="amz-subnav">
+    <span>&#9776; All</span>
+    <span>Amazon miniTV</span>
+    <span>Sell</span>
+    <span>Best Sellers</span>
+    <span>Today's Deals</span>
+    <span>Mobiles</span>
+    <span>Electronics</span>
+    <span>Customer Service</span>
+  </div>
+
+  <!-- Real Amazon Product Page Body -->
+  <div class="amz-product-page">
+    <!-- Gallery Column -->
+    <div class="amz-gallery-col">
+      <img class="amz-main-image" src="file:///D:/sony_headphones.jpg" alt="Sony WH-1000XM5">
+      <div class="amz-thumbs-row">
+        <div class="amz-thumb-box active"><img src="file:///D:/sony_headphones.jpg" alt="t1"></div>
+        <div class="amz-thumb-box"><img src="file:///D:/sony_headphones.jpg" alt="t2"></div>
+        <div class="amz-thumb-box"><img src="file:///D:/sony_headphones.jpg" alt="t3"></div>
+        <div class="amz-thumb-box"><img src="file:///D:/sony_headphones.jpg" alt="t4"></div>
+      </div>
+    </div>
+
+    <!-- Product Details Column -->
+    <div class="amz-details-col">
+      <h1 class="amz-prod-title">Sony WH-1000XM5 Wireless Industry Leading Active Noise Cancelling Headphones - 30 Hr Battery, Built-in Mic - Black</h1>
+      <a href="#" class="amz-brand-link">Visit the Sony Store</a>
+
+      <div class="amz-rating-row">
+        <span class="amz-stars">&#9733;&#9733;&#9733;&#9733;&#9734; 4.6</span>
+        <span class="amz-rating-count">(3,842 ratings)</span>
+        <span class="amz-badge-seller">#1 Best Seller</span>
+      </div>
+
+      <div class="amz-divider"></div>
+
+      <div class="amz-price-section">
+        <span class="amz-deal-tag">Limited time deal</span>
+        <div class="amz-price-big">
+          <span class="amz-discount">-23%</span>
+          <span class="amz-cur-price">&#8377;26,990</span>
+        </div>
+        <div class="amz-mrp-row">M.R.P.: <del>&#8377;34,990</del> &bull; Inclusive of all taxes</div>
+      </div>
+
+      <!-- INJECTED DEALFLOW WIDGET -->
+      <div class="injected-dealflow-card">
+        <div class="df-card-header">
+          <div class="df-title-wrap">
+            <div class="df-icon-square">⚡</div>
+            <span class="df-brand-name">DealFlow Price Intelligence</span>
+          </div>
+          <span class="df-lowest-badge">🔥 Lowest Price in 90 Days!</span>
+        </div>
+
+        <div class="df-stats-strip">
+          <div class="df-stat-box green">
+            <div class="lbl">Current</div>
+            <div class="val">&#8377;26,990</div>
+          </div>
+          <div class="df-stat-box">
+            <div class="lbl">Lowest</div>
+            <div class="val">&#8377;24,990</div>
+          </div>
+          <div class="df-stat-box">
+            <div class="lbl">Average</div>
+            <div class="val">&#8377;29,450</div>
+          </div>
+          <div class="df-stat-box">
+            <div class="lbl">Highest</div>
+            <div class="val">&#8377;34,990</div>
+          </div>
+        </div>
+
+        <div class="df-chart-area">
+          <svg viewBox="0 0 460 48" style="width: 100%; height: 38px;" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="dfChartGrad2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#10b981" stop-opacity="0.45"/>
+                <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
+              </linearGradient>
+            </defs>
+            <path d="M 10 16 C 60 8, 120 38, 180 20 C 240 4, 300 28, 360 22 C 400 16, 430 38, 450 36 L 450 48 L 10 48 Z" fill="url(#dfChartGrad2)"/>
+            <path d="M 10 16 C 60 8, 120 38, 180 20 C 240 4, 300 28, 360 22 C 400 16, 430 38, 450 36" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="450" cy="36" r="4" fill="#10b981" stroke="#fff" stroke-width="2"/>
+          </svg>
+          <div class="df-chart-timeline">
+            <span>90 Days Ago (&#8377;34,990)</span>
+            <span>45 Days Ago (&#8377;29,450)</span>
+            <span style="color: #34d399; font-weight: 700;">Today (&#8377;26,990)</span>
+          </div>
+        </div>
+
+        <div class="df-action-bar">
+          <div class="df-alert-pill">&#128276; Set Price Drop Alert for &#8377;24,290</div>
+          <span class="df-coupon-hint">✨ 5 Coupons Ready at Checkout</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Amazon Buy Box -->
+    <div class="amz-buybox-col">
+      <div class="amz-bb-price">&#8377;26,990.00</div>
+      <div class="amz-bb-del">
+        FREE delivery <strong>Tomorrow, 20 Nov</strong>.<br>
+        Order within <strong>4 hrs 12 mins</strong>.
+      </div>
+      <div class="amz-bb-stock">In stock</div>
+      <button class="amz-add-btn">Add to Cart</button>
+      <button class="amz-buy-btn">Buy Now</button>
+      <div class="amz-sold-by">
+        Ships from <span>Amazon</span><br>
+        Sold by <span>Appario Retail Private Ltd</span>
+      </div>
+    </div>
+
+    <!-- Authentic DealFlow Popup Dropped Down -->
+    <div class="dealflow-popup-overlay">
+      <div class="df-pop-head">
+        <div class="df-pop-brand">
+          <div class="df-pop-logo">
+            <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </div>
+          <div class="df-pop-brand-text">
+            <h2>DealFlow <span>PRO</span></h2>
+            <p>ENGINE ACTIVE</p>
+          </div>
+        </div>
+        <div style="color: #64748b; font-size: 16px;">&#9881;</div>
+      </div>
+
+      <div class="df-pop-store-bar">
+        <div class="df-store-row">
+          <strong>Amazon Active</strong>
+          <span class="df-coupon-tag">Auto-Coupons ON</span>
+        </div>
+        <p class="df-store-desc">Tracking prices in real time. 90-day vector chart injected on product page.</p>
+      </div>
+
+      <div class="df-pop-metrics">
+        <div class="df-pop-card green">
+          <div class="num">&#8377;1,850</div>
+          <div class="lbl">Total User Savings</div>
+        </div>
+        <div class="df-pop-card">
+          <div class="num">14</div>
+          <div class="lbl">Tracked Deals</div>
+        </div>
+      </div>
+
+      <div class="df-affiliate-box">
+        <div class="df-aff-left">
+          <strong>Affiliate Mode Active</strong>
+          <span>Tag: dealflow0a-21</span>
+        </div>
+        <span class="df-aff-badge">Monetized</span>
+      </div>
+
+      <div class="df-pop-feats">
+        <div class="df-pop-feat-row">
+          <div class="df-feat-left">
+            <span class="d-dot emerald"></span>
+            <span>90-Day Vector SVG Chart</span>
+          </div>
+          <span class="d-active-tag">Active</span>
+        </div>
+        <div class="df-pop-feat-row">
+          <div class="df-feat-left">
+            <span class="d-dot indigo"></span>
+            <span>Checkout Coupon Applier</span>
+          </div>
+          <span class="d-active-tag">Active</span>
+        </div>
+        <div class="df-pop-feat-row">
+          <div class="df-feat-left">
+            <span class="d-dot amber"></span>
+            <span>DNR Affiliate Link Binding</span>
+          </div>
+          <span class="d-active-tag">Active</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
