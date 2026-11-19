@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DealFlow - Monetization & Affiliate Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="df-options-container">
+    <header class="df-options-header">
+      <div class="brand">
+        <div class="brand-icon">⚡</div>
+        <div>
+          <h1>DealFlow <span>Monetization & Settings</span></h1>
+          <p>Configure your personal affiliate tags to earn passive shopping commissions</p>
+        </div>
+      </div>
+      <div class="header-badge">Manifest V3 Production Build</div>
+    </header>
+
+    <main class="df-options-grid">
+      <!-- Affiliate Tag Configuration Card -->
+      <section class="df-settings-card">
+        <div class="card-header">
+          <h2>💸 Affiliate Earnings Engine</h2>
+          <span class="active-pill">Earning Mode ON</span>
+        </div>
+        <p class="card-desc">
+          Enter your personal Amazon and Flipkart affiliate identifiers below. When users browse or purchase products, your tag is automatically attached so 100% of the commission goes straight to your account.
+        </p>
+
+        <form id="affiliateForm" class="df-form">
+          <div class="form-group">
+            <label for="amazonTagInput">Amazon Associate Store Tag (e.g. tag-21)</label>
+            <input 
+              type="text" 
+              id="amazonTagInput" 
+              placeholder="yourtag-21" 
+              required
+            />
+            <small class="help-text">Get your free tag from <a href="https://affiliate-program.amazon.in/" target="_blank">Amazon Associates India</a></small>
+          </div>
+
+          <div class="form-group">
+            <label for="flipkartAffidInput">Flipkart Affiliate Tracking ID</label>
+            <input 
+              type="text" 
+              id="flipkartAffidInput" 
+              placeholder="youraffid" 
+              required
+            />
+            <small class="help-text">Get your tracking ID from the Flipkart Affiliate Program</small>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="saveAffiliateBtn" class="btn-primary">Save Affiliate Configuration</button>
+            <span id="saveSuccessText" class="success-message" style="display: none;">Saved & Synced!</span>
+          </div>
+        </form>
+      </section>
+
+      <!-- Earnings & Commission Guide Card -->
+      <section class="df-settings-card">
+        <div class="card-header">
+          <h2>📊 Commission Potential</h2>
+        </div>
+        <p class="card-desc">How you make money from every user who installs your extension:</p>
+
+        <div class="commission-table">
+          <div class="table-row header">
+            <span>Category</span>
+            <span>Avg Commission</span>
+          </div>
+          <div class="table-row">
+            <span>Electronics & Laptops</span>
+            <span class="rate">4% - 5%</span>
+          </div>
+          <div class="table-row">
+            <span>Fashion & Shoes</span>
+            <span class="rate highlight">9% - 10%</span>
+          </div>
+          <div class="table-row">
+            <span>Home & Kitchen Appliances</span>
+            <span class="rate highlight">8% - 9%</span>
+          </div>
+          <div class="table-row">
+            <span>Smartphones & Mobile</span>
+            <span class="rate">1.5% - 2.5%</span>
+          </div>
+        </div>
+
+        <div class="math-callout">
+          <strong>Passive Math:</strong> If 1,000 users buy an average of ₹3,000 worth of goods each month at a 5% commission rate = <strong>₹1,50,000/month</strong> in passive affiliate earnings.
+        </div>
+      </section>
+    </main>
+
+    <!-- Tracked Price Drop Alerts Section -->
+    <section class="df-settings-card full-width">
+      <div class="card-header">
+        <h2>🔔 Monitored Products & Price Alerts</h2>
+        <span id="alertCountBadge" class="count-badge">0 Monitored</span>
+      </div>
+      <div class="alerts-list-wrapper">
+        <ul id="alertsUl" class="alerts-list">
+          <li class="empty-state">No price drop alerts set yet. Click "Set Price Drop Alert" on any Amazon or Flipkart product page!</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer class="df-options-footer">
+      <p>DealFlow Pro v1.0.0 • Pure Manifest V3 Architecture • Zero Personal Data Stored</p>
+    </footer>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

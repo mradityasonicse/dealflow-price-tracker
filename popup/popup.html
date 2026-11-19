@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DealFlow</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="df-popup-container">
+    <!-- Header -->
+    <header class="df-header">
+      <div class="df-brand">
+        <div class="df-logo-box">⚡</div>
+        <div class="df-brand-text">
+          <h1>DealFlow <span>PRO</span></h1>
+          <p class="status-live">Engine Active</p>
+        </div>
+      </div>
+      <button id="openSettingsBtn" class="df-icon-btn" title="Settings & Affiliate Tags" aria-label="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </header>
+
+    <!-- Active Store Status Card -->
+    <section class="df-store-card">
+      <div class="store-badge-row">
+        <span id="currentStoreBadge" class="store-badge amazon">Amazon & Flipkart Ready</span>
+        <span class="auto-coupon-badge">Auto-Coupons ON</span>
+      </div>
+      <p id="currentStoreDesc" class="store-desc">
+        Browse any product on Amazon or Flipkart to inspect 90-day price trends and auto-apply best coupons at checkout.
+      </p>
+    </section>
+
+    <!-- Savings & Trackers Metrics Grid -->
+    <section class="df-metrics-grid">
+      <div class="df-metric-card highlight">
+        <span class="metric-icon">💰</span>
+        <div class="metric-info">
+          <span id="savingsCount" class="metric-num">₹1,850</span>
+          <span class="metric-lbl">Total Money Saved</span>
+        </div>
+      </div>
+
+      <div class="df-metric-card">
+        <span class="metric-icon">🔔</span>
+        <div class="metric-info">
+          <span id="alertsCount" class="metric-num">0</span>
+          <span class="metric-lbl">Price Drop Alerts</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Revenue / Affiliate Status Banner -->
+    <section class="df-monetization-banner">
+      <div class="banner-left">
+        <span class="tag-icon">🏷️</span>
+        <div>
+          <p class="banner-title">Affiliate Commission Mode</p>
+          <p id="affiliateTagDisplay" class="banner-subtitle">Tag: dealflow0a-21</p>
+        </div>
+      </div>
+      <span class="banner-status active">Active</span>
+    </section>
+
+    <!-- Quick Action / Features -->
+    <section class="df-features-list">
+      <div class="feature-item">
+        <span class="feat-bullet">📈</span>
+        <span>90-Day Vector Price History Graphs</span>
+      </div>
+      <div class="feature-item">
+        <span class="feat-bullet">⚡</span>
+        <span>Instant Checkout Coupon Auto-Applier</span>
+      </div>
+      <div class="feature-item">
+        <span class="feat-bullet">💸</span>
+        <span>Passive Amazon & Flipkart Affiliate Engine</span>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="df-footer">
+      <span>DealFlow v1.0.0</span>
+      <button id="openOptionsLink" class="footer-link">Configure Affiliate Tags</button>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
